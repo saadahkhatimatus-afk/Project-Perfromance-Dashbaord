@@ -1,0 +1,18 @@
+﻿Stage,W/F(%),Cumulative last Month,,,Progress this Month,,,Cumulative this Month,,,Status
+,,Plan ,Actual,Variance,Plan ,Actual,Variance,"Plan
+(A) ","Actual
+(B)","Variance
+(B - A)",
+Engineering,8.00,100.00,99.04,-0.96,0.00,0.01,0.01,100.00,99.05,-0.95,On-Track
+Procurement ,45.00,100.00,94.44,-5.56,0.00,1.25,1.25,100.00,95.69,-4.31,Minor Dev.
+Construction ,46.00,100.00,96.91,-3.09,0.00,0.73,0.73,100.00,97.64,-2.36,On-Track
+Commissioning,1.00,94.34,12.26,-82.08,2.27,0.12,-2.15,96.61,12.38,-84.23,Critical
+Overall progress,100.00,99.94,95.12,-4.82,0.03,0.90,0.87,99.97,96.02,-3.95,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
