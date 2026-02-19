@@ -1,26 +1,53 @@
-import streamlit as st
 import pandas as pd
-import plotly.graph_object as go
+import plotly.express as px
+from dash import Dash, dcc, html
+import dash_bootstrap_components as dbc
 
-st.set_page_config(layout="wide", page_title="Construction Dashboard")
+# Load datasets
+df_scurve = pd.read_csv("data/data_scurve.csv")
+df_summary = pd.read_csv("data/data_summary.csv")
 
-df = pd.read_csv('data/data_scurve.csv')
-df_sum = pd.read_csv('data/data_summary.csv')
+# === KPI Calculation ===
+total_pv = df_summary["Planned_Value"].sum()
+total_ev = df_summary["Earned_Value"].sum()
+total_ac = df_summary["Actual_Cost"].sum()
 
-st.title("🏗️ Project Performance Dashboard")
-st.markdown("---")
+spi = total_ev / total_pv
+cpi = total_ev / total_ac
 
-cols = st.columns(len(df_sum))
-for i, row in df_sum.itterrows():
-  cols[i].metric(label=row['Stage'], value=f"{row['Actual']}%", delta=f"{row['Variance']}%")
+# === S-Curve Figure ===
+fig_scurve = px.line(
+    df_scurve,
+    x="Date",
+    y=["Planned_Value", "Earned_Value", "Actual_Cost"],
+    title="Project S-Curve Performance"
+)
 
-st.subheader( "S-Curve Analysis (Plan vs Actual)")
-fig = go. Figure()
+# === App ===
+app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
-fig.add_trace(go.Bar(x=df['Date'], y=df['Plan_Monthly'], name='Plan Monthly', marker_color='lightgrey'))
-fig.add_trace(go.Bar(x=df['Date'], y=df['Actual_Monthly'], name='Actual Monthly', marker_color='skyblue'))
-fig.add_trace(go.Scatter(x=df['Date'], y=df['Plan_Cum'], name='Plan Cumulative', line=dict(color='red', width=2)))
-fig.add_trace(go.Scatter(x=df['Date'], y=df['Actual_Cum'], name='Actual Cumulative', line=dict(color='blue', width=2)))
+app.layout = dbc.Container([
 
-fig.update_layout(havermode="x unified", height=500)
-st.plotly_chart(fig, use_container_width=True)
+    html.H1("Construction Project Performance Intelligence Dashboard",
+            className="text-center my-4"),
+
+    dbc.Row([
+        dbc.Col(dbc.Card(dbc.CardBody([
+            html.H5("Schedule Performance Index (SPI)"),
+            html.H2(f"{spi:.2f}")
+        ])), width=6),
+
+        dbc.Col(dbc.Card(dbc.CardBody([
+            html.H5("Cost Performance Index (CPI)"),
+            html.H2(f"{cpi:.2f}")
+        ])), width=6),
+    ], className="mb-4"),
+
+    dbc.Row([
+        dbc.Col(dcc.Graph(figure=fig_scurve), width=12)
+    ]),
+
+], fluid=True)
+
+if __name__ == "__main__":
+    app.run_server(debug=True)
