@@ -8,6 +8,3 @@ data_curve.csv
 -Actual Monthly Progress (%)
 -Actual Cumulative Progress (%)
 -Deviation (%)
-
-
-data_sumamry
